@@ -1,0 +1,41 @@
+version: '3.0'
+
+services:
+  node-app:
+    build:
+      context: .
+    container_name: node-app
+    volumes:
+      - ./app:/usr/src/app
+    networks:
+      - minha-rede-node
+    tty: true
+
+  node-proxy:
+    image: nginx
+    container_name: node-proxy
+    ports:
+      - 8080:80
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    networks:
+      - minha-rede-node
+    tty: true
+
+  node-db:
+    image: mysql
+    command: --innodb_use_native_aio=0
+    container_name: node-db
+    restart: always
+    tty: true
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=node_database
+    networks:
+      - minha-rede-node
+    volumes:
+      - ./mysql:/var/lib/mysql
+
+networks:
+  minha-rede-node:
+    driver: bridge
