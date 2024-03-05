@@ -5,11 +5,14 @@ services:
     build:
       context: .
     container_name: node-app
+    entrypoint: dockerize -wait tcp://node-db:3306 -timeout 20s node index.js
     volumes:
-      - ./app:/usr/src/app
+      - node-app-vol:/usr/src/app
     networks:
-      - minha-rede-node
+      - minha-rede-node-backend
     tty: true
+    depends_on:
+      - node-db
 
   node-proxy:
     image: nginx
@@ -19,8 +22,11 @@ services:
     volumes:
       - ./nginx:/etc/nginx/conf.d
     networks:
-      - minha-rede-node
+      - minha-rede-node-backend
+      - minha-rede-node-frontend
     tty: true
+    depends_on:
+      - node-app
 
   node-db:
     image: mysql
@@ -32,10 +38,16 @@ services:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=node_database
     networks:
-      - minha-rede-node
+      - minha-rede-node-backend
     volumes:
-      - ./mysql:/var/lib/mysql
+      - mysql-vol:/var/lib/mysql
+      - ./database/create-tables.sql:/docker-entrypoint-initdb.d/create-tables.sql
 
 networks:
-  minha-rede-node:
-    driver: bridge
+  minha-rede-node-backend:
+    internal: true
+  minha-rede-node-frontend:
+    internal: false
+volumes:
+  node-app-vol:
+  mysql-vol:

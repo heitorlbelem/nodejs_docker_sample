@@ -21,7 +21,11 @@ app.get("/", async (req, res) => {
     return reg.name;
   });
 
-  res.json({ message: names });
+  res.json({
+    message:
+      'FullCycle Rocks! Para adicionar um nome, faça um request POST para / passando { name: "Teste" }.',
+    names,
+  });
 });
 
 app.post("/", async (req, res) => {
