@@ -20,12 +20,12 @@ app.get("/", async (req, res) => {
   const names = result[0].map((reg) => {
     return reg.name;
   });
+  const namesList = names.map((name) => `<li> ${name} </li>`).join(" ");
 
-  res.json({
-    message:
-      'FullCycle Rocks! Para adicionar um nome, faça um request POST para / passando { name: "Teste" }.',
-    names,
-  });
+  res.send(`
+    <h1> Hello FullCycle!</h1>
+    <ul> ${namesList} </ul>
+  `);
 });
 
 app.post("/", async (req, res) => {

@@ -6,3 +6,5 @@ CREATE TABLE IF NOT EXISTS people (
     name VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
 );
+
+INSERT INTO people(name) VALUES("FullCycle Rocks!");
