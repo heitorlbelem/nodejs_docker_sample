@@ -8,7 +8,7 @@ services:
     entrypoint: dockerize -wait tcp://node-db:3306 -timeout 20s node index.js
     volumes:
       - node-app-vol:/usr/src/app
-      - ./app/index.js:/usr/src/app/index.js
+      - ./app:/usr/src/app
     networks:
       - minha-rede-node-backend
     tty: true
